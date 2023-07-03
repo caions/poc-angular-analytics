@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { AuthenticationService } from '../authentication.service';
+import { GoogleAnalyticsService } from 'ngx-google-analytics';
 
 @Component({
   selector: 'app-login',
@@ -10,7 +11,10 @@ import { AuthenticationService } from '../authentication.service';
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
 
-  constructor(private authService: AuthenticationService) { }
+  constructor(
+    private authService: AuthenticationService,     
+    private $gaService: GoogleAnalyticsService
+    ) { }
 
   ngOnInit() {
     this.loginForm = new FormGroup({
@@ -27,6 +31,7 @@ export class LoginComponent implements OnInit {
       // Lógica de autenticação bem-sucedida
       console.log('Usuário autenticado:', response);
       console.log('Token de acesso:', response.token);
+      this.$gaService.event('submit', 'user_register_form', 'Enviar');
     }, error => {
       // Lógica de autenticação falhou
       console.error('Falha na autenticação:', error);
